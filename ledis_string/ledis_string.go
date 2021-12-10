@@ -3,6 +3,7 @@ package ledis_string
 import (
 	"errors"
 	"fmt"
+	"github.com/duonghds/ledis/common"
 	"github.com/duonghds/ledis/ledis_global"
 )
 
@@ -40,8 +41,8 @@ func (s *service) Set(key string, value string) string {
 func (s *service) Get(key string) (string, error) {
 	keys := s.globalService.GetKeys()
 	if _, ok := keys[key]; !ok {
-		fmt.Println(fmt.Sprintf("[Get]key %s not exists", key))
-		return "", errors.New("key not exists")
+		fmt.Println(fmt.Sprintf("[Get]key %s not found", key))
+		return "", errors.New(common.KeyNotFound)
 	}
 	payloadValue := keys[key]
 	value := payloadValue.Value.(string)

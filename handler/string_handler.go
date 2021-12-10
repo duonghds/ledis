@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/duonghds/ledis/ledis_string"
+import (
+	"github.com/duonghds/ledis/ledis_string"
+)
 
 func handleSetCommand(stringService ledis_string.StringService, splitCommand []string) string {
 	//all is string value after element[0](command) and element[1](key)
@@ -17,7 +19,7 @@ func handleSetCommand(stringService ledis_string.StringService, splitCommand []s
 func handleGetCommand(stringService ledis_string.StringService, key string) string {
 	value, err := stringService.Get(key)
 	if err != nil {
-		return "ERROR: key not found"
+		return err.Error()
 	}
 	return value
 }
