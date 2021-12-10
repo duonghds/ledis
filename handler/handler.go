@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func CommandHandler(listService *ListService) gin.HandlerFunc {
+func CommandHandler(listService *CommandListService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		if err != nil {
@@ -34,13 +34,17 @@ func CommandHandler(listService *ListService) gin.HandlerFunc {
 	}
 }
 
-func handleCommand(mainCommand string, splitCommand []string, listService *ListService) string {
+func handleCommand(mainCommand string, splitCommand []string, commandListService *CommandListService) string {
 	switch mainCommand {
 	case "set":
-		return handleSetCommand(listService.StringService, splitCommand)
+		return handleSetCommand(commandListService.StringService, splitCommand)
 	case "get":
-		return handleGetCommand(listService.StringService, splitCommand[1])
+		return handleGetCommand(commandListService.StringService, splitCommand[1])
+	case "rpush":
+		return handleRPushCommand(commandListService.ListService, splitCommand)
+	case "lrange":
+		return handleLRangeCommand(commandListService.ListService, splitCommand)
 	default:
-		return "ERROR: Unknown command"
+		return common.ErrUnknownCommand
 	}
 }

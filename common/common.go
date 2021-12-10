@@ -6,7 +6,14 @@ import (
 )
 
 const (
-	KeyNotFound = "ERROR: Key not found"
+	ErrKeyNotFound = "ERROR: Key not found"
+	ErrKeyEmpty    = "ERROR: Key empty"
+
+	ErrStopLessThanStart = "ERROR: Stop less than start"
+
+	ErrUnknownCommand  = "ERROR: Unknown command"
+	ErrNotEnoughParams = "ERROR: Not enough params"
+	ErrWrongType       = "ERROR: Wrong type"
 )
 
 //RemoveDuplicateAndTrimSpace ...

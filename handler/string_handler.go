@@ -13,7 +13,11 @@ func handleSetCommand(stringService ledis_string.StringService, splitCommand []s
 			value = value + " "
 		}
 	}
-	return stringService.Set(splitCommand[1], value)
+	msg, err := stringService.Set(splitCommand[1], value)
+	if err != nil {
+		return err.Error()
+	}
+	return msg
 }
 
 func handleGetCommand(stringService ledis_string.StringService, key string) string {

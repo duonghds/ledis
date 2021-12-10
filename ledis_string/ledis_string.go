@@ -2,7 +2,6 @@ package ledis_string
 
 import (
 	"errors"
-	"fmt"
 	"github.com/duonghds/ledis/common"
 	"github.com/duonghds/ledis/ledis_global"
 )
@@ -16,7 +15,7 @@ type service struct {
 }
 
 type StringService interface {
-	Set(key string, value string) string
+	Set(key string, value string) (string, error)
 	Get(key string) (string, error)
 }
 
@@ -27,22 +26,27 @@ func NewService(globalService ledis_global.GlobalService) StringService {
 }
 
 //Set string
-func (s *service) Set(key string, value string) string {
+func (s *service) Set(key string, value string) (string, error) {
+	if key == "" {
+		return "", errors.New(common.ErrKeyEmpty)
+	}
 	payload := ledis_global.PayloadValue{
 		Type:  Type,
 		Value: value,
 	}
 	s.globalService.AddKey(key, payload)
 
-	return "OK"
+	return "OK", nil
 }
 
 //Get string
 func (s *service) Get(key string) (string, error) {
+	if key == "" {
+		return "", errors.New(common.ErrKeyEmpty)
+	}
 	keys := s.globalService.GetKeys()
 	if _, ok := keys[key]; !ok {
-		fmt.Println(fmt.Sprintf("[Get]key %s not found", key))
-		return "", errors.New(common.KeyNotFound)
+		return "", errors.New(common.ErrKeyNotFound)
 	}
 	payloadValue := keys[key]
 	value := payloadValue.Value.(string)
