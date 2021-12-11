@@ -8,9 +8,6 @@ import (
 )
 
 func handleRPushCommand(listService ledis_list.ListService, splitCommand []string) string {
-	if len(splitCommand) < 3 {
-		return common.ErrNotEnoughParams
-	}
 	countAppend, err := listService.RPush(splitCommand[1], splitCommand[2:])
 	if err != nil {
 		return err.Error()
@@ -19,9 +16,6 @@ func handleRPushCommand(listService ledis_list.ListService, splitCommand []strin
 }
 
 func handleLRangeCommand(listService ledis_list.ListService, splitCommand []string) string {
-	if len(splitCommand) < 3 {
-		return common.ErrNotEnoughParams
-	}
 	start, err := strconv.Atoi(splitCommand[2])
 	if err != nil {
 		return common.ErrWrongType
