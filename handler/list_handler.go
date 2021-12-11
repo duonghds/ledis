@@ -39,3 +39,24 @@ func handleLRangeCommand(listService ledis_list.ListService, splitCommand []stri
 	}
 	return fmt.Sprintf("%+v", rangeList)
 }
+
+func handleLLenCommand(listService ledis_list.ListService, key string) string {
+	len := listService.LLen(key)
+	return strconv.Itoa(len)
+}
+
+func handleLPopCommand(listService ledis_list.ListService, key string) string {
+	popValue, err := listService.LPop(key)
+	if err != nil {
+		return err.Error()
+	}
+	return popValue
+}
+
+func handleRPopCommand(listService ledis_list.ListService, key string) string {
+	popValue, err := listService.RPop(key)
+	if err != nil {
+		return err.Error()
+	}
+	return popValue
+}

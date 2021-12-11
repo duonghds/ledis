@@ -2,7 +2,6 @@ package ledis_list
 
 import (
 	"errors"
-	"fmt"
 	"github.com/duonghds/ledis/common"
 	"github.com/duonghds/ledis/ledis_global"
 )
@@ -18,8 +17,8 @@ type service struct {
 type ListService interface {
 	LLen(key string) int
 	RPush(key string, value []string) (int, error)
-	LPop(key string) string
-	RPop(key string) string
+	LPop(key string) (string, error)
+	RPop(key string) (string, error)
 	LRange(key string, start int, stop int) ([]string, error)
 }
 
@@ -30,7 +29,16 @@ func NewService(globalService ledis_global.GlobalService) ListService {
 }
 
 func (s *service) LLen(key string) int {
-	return 0
+	if key == "" {
+		return 0
+	}
+	keys := s.globalService.GetKeys()
+	if _, ok := keys[key]; !ok {
+		return 0
+	}
+	payloadValue := keys[key]
+	value := payloadValue.Value.([]string)
+	return len(value)
 }
 
 func (s *service) RPush(key string, addingValue []string) (int, error) {
@@ -55,16 +63,45 @@ func (s *service) RPush(key string, addingValue []string) (int, error) {
 	}
 	s.globalService.AddKey(key, payload)
 	keys = s.globalService.GetKeys()
-	fmt.Println(keys)
 	return len(addingValue), nil
 }
 
-func (s *service) LPop(key string) string {
-	return ""
+func (s *service) LPop(key string) (string, error) {
+	if key == "" {
+		return "", errors.New(common.ErrKeyEmpty)
+	}
+	keys := s.globalService.GetKeys()
+	if _, ok := keys[key]; !ok {
+		return "", errors.New(common.ErrKeyNotFound)
+	}
+	payloadValue := keys[key]
+	value := payloadValue.Value.([]string)
+	popValue := value[0]
+	payload := ledis_global.PayloadValue{
+		Type:  Type,
+		Value: value[1:], //Remove first element
+	}
+	s.globalService.AddKey(key, payload)
+	return popValue, nil
 }
 
-func (s *service) RPop(key string) string {
-	return ""
+func (s *service) RPop(key string) (string, error) {
+	if key == "" {
+		return "", errors.New(common.ErrKeyEmpty)
+	}
+	keys := s.globalService.GetKeys()
+	if _, ok := keys[key]; !ok {
+		return "", errors.New(common.ErrKeyNotFound)
+	}
+	payloadValue := keys[key]
+	value := payloadValue.Value.([]string)
+	popValue := value[len(value)-1]
+	payload := ledis_global.PayloadValue{
+		Type:  Type,
+		Value: value[:len(value)-1], //Remove last element
+	}
+	s.globalService.AddKey(key, payload)
+	return popValue, nil
 }
 
 func (s *service) LRange(key string, start int, stop int) ([]string, error) {

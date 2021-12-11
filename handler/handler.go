@@ -40,8 +40,15 @@ func handleCommand(mainCommand string, splitCommand []string, commandListService
 		return handleSetCommand(commandListService.StringService, splitCommand)
 	case "get":
 		return handleGetCommand(commandListService.StringService, splitCommand[1])
+
+	case "llen":
+		return handleLLenCommand(commandListService.ListService, splitCommand[1])
 	case "rpush":
 		return handleRPushCommand(commandListService.ListService, splitCommand)
+	case "lpop":
+		return handleLPopCommand(commandListService.ListService, splitCommand[1])
+	case "rpop":
+		return handleRPopCommand(commandListService.ListService, splitCommand[1])
 	case "lrange":
 		return handleLRangeCommand(commandListService.ListService, splitCommand)
 	default:
