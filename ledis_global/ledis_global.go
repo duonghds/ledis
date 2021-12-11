@@ -52,6 +52,12 @@ func (s *service) Del(key string) error {
 }
 
 func (s *service) GetKeys() map[string]PayloadValue {
+	//check and delete key expire
+	for k, v := range s.keys {
+		if v.ExpireTime.After(time.Now()) {
+			delete(s.keys, k)
+		}
+	}
 	return s.keys
 }
 
@@ -85,6 +91,7 @@ func (s *service) Expire(key string, second int) int {
 	}
 	payloadValue, _ := s.keys[key]
 	payloadValue.ExpireTime = time.Now().Add(time.Second * time.Duration(second))
+	s.keys[key] = payloadValue
 	return second
 }
 func (s *service) TTL(key string) int {
