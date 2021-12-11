@@ -27,6 +27,7 @@ func initCommandService() *handler.CommandListService {
 	listService := ledis_list.NewService(globalService)
 
 	return &handler.CommandListService{
+		GlobalService: globalService,
 		StringService: stringService,
 		ListService:   listService,
 	}

@@ -24,8 +24,10 @@ type GlobalService interface {
 
 func InitGlobal() GlobalService {
 	keys := make(map[string]PayloadValue)
+	backup := make(map[string]PayloadValue)
 	return &service{
-		keys: keys,
+		keys:   keys,
+		backup: backup,
 	}
 }
 
@@ -54,7 +56,9 @@ func (s *service) GetKeys() map[string]PayloadValue {
 }
 
 func (s *service) Save() error {
-	s.backup = s.keys
+	for k, v := range s.keys {
+		s.backup[k] = v
+	}
 	return nil
 }
 
@@ -62,7 +66,9 @@ func (s *service) Restore() error {
 	if len(s.backup) == 0 {
 		return errors.New("not have snapshot before")
 	}
-	s.keys = s.backup
+	for k, v := range s.backup {
+		s.keys[k] = v
+	}
 	return nil
 }
 

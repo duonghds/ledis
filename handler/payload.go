@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/duonghds/ledis/ledis_global"
 	"github.com/duonghds/ledis/ledis_list"
 	"github.com/duonghds/ledis/ledis_string"
 )
@@ -14,6 +15,7 @@ type ResponseData struct {
 }
 
 type CommandListService struct {
+	GlobalService ledis_global.GlobalService
 	StringService ledis_string.StringService
 	ListService   ledis_list.ListService
 }

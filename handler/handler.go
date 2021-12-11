@@ -51,6 +51,16 @@ func handleCommand(mainCommand string, splitCommand []string, commandListService
 		return handleRPopCommand(commandListService.ListService, splitCommand[1])
 	case "lrange":
 		return handleLRangeCommand(commandListService.ListService, splitCommand)
+	//case "keys":
+	//case "del":
+	//case "flushdb":
+	//case "expire":
+	//case "ttl":
+
+	case "save":
+		return handleSaveCommand(commandListService.GlobalService)
+	case "restore":
+		return handleRestoreCommand(commandListService.GlobalService)
 	default:
 		return common.ErrUnknownCommand
 	}
