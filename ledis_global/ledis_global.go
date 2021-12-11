@@ -56,6 +56,7 @@ func (s *service) GetKeys() map[string]PayloadValue {
 }
 
 func (s *service) Save() error {
+	s.backup = make(map[string]PayloadValue)
 	for k, v := range s.keys {
 		s.backup[k] = v
 	}
@@ -66,6 +67,7 @@ func (s *service) Restore() error {
 	if len(s.backup) == 0 {
 		return errors.New("not have snapshot before")
 	}
+	s.keys = make(map[string]PayloadValue)
 	for k, v := range s.backup {
 		s.keys[k] = v
 	}
