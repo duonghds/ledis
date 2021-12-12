@@ -7,13 +7,17 @@ import (
 	"github.com/duonghds/ledis/ledis_list"
 	"github.com/duonghds/ledis/ledis_set"
 	"github.com/duonghds/ledis/ledis_string"
+	"github.com/gin-contrib/cors"
+	_ "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	"os"
 )
 
 func main() {
 	commandListService := initCommandService()
 	router := gin.Default()
+	router.Use(cors.Default())
 	v1 := router.Group("/api")
 	{
 		v1.POST("/", handler.CommandHandler(commandListService))
