@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/duonghds/ledis/handler"
 	"github.com/duonghds/ledis/ledis_global"
 	"github.com/duonghds/ledis/ledis_list"
 	"github.com/duonghds/ledis/ledis_set"
 	"github.com/duonghds/ledis/ledis_string"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 func main() {
@@ -16,8 +18,8 @@ func main() {
 	{
 		v1.POST("/", handler.CommandHandler(commandListService))
 	}
-
-	router.Run(":9900")
+	port := os.Getenv("PORT")
+	router.Run(fmt.Sprintf(":%s", port))
 }
 
 func initCommandService() *handler.CommandListService {
