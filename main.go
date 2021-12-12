@@ -4,6 +4,7 @@ import (
 	"github.com/duonghds/ledis/handler"
 	"github.com/duonghds/ledis/ledis_global"
 	"github.com/duonghds/ledis/ledis_list"
+	"github.com/duonghds/ledis/ledis_set"
 	"github.com/duonghds/ledis/ledis_string"
 	"github.com/gin-gonic/gin"
 )
@@ -26,9 +27,12 @@ func initCommandService() *handler.CommandListService {
 
 	listService := ledis_list.NewService(globalService)
 
+	setService := ledis_set.NewService(globalService)
+
 	return &handler.CommandListService{
 		GlobalService: globalService,
 		StringService: stringService,
 		ListService:   listService,
+		SetService:    setService,
 	}
 }

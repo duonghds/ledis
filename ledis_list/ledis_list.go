@@ -16,7 +16,7 @@ type service struct {
 
 type ListService interface {
 	LLen(key string) int
-	RPush(key string, value []string) (int, error)
+	RPush(key string, values []string) (int, error)
 	LPop(key string) (string, error)
 	RPop(key string) (string, error)
 	LRange(key string, start int, stop int) ([]string, error)
@@ -41,7 +41,7 @@ func (s *service) LLen(key string) int {
 	return len(value)
 }
 
-func (s *service) RPush(key string, addingValue []string) (int, error) {
+func (s *service) RPush(key string, addingValues []string) (int, error) {
 	if key == "" {
 		return 0, errors.New(common.ErrKeyEmpty)
 	}
@@ -50,12 +50,12 @@ func (s *service) RPush(key string, addingValue []string) (int, error) {
 	if _, ok := keys[key]; !ok { //Create new key if not exists
 		payload = ledis_global.PayloadValue{
 			Type:  Type,
-			Value: addingValue,
+			Value: addingValues,
 		}
 	} else { //Append new list value to existing key
 		payloadValue := keys[key]
 		value := payloadValue.Value.([]string)
-		value = append(value, addingValue...)
+		value = append(value, addingValues...)
 		payload = ledis_global.PayloadValue{
 			Type:  Type,
 			Value: value,
@@ -63,7 +63,7 @@ func (s *service) RPush(key string, addingValue []string) (int, error) {
 	}
 	s.globalService.AddKey(key, payload)
 	keys = s.globalService.GetKeys()
-	return len(addingValue), nil
+	return len(addingValues), nil
 }
 
 func (s *service) LPop(key string) (string, error) {

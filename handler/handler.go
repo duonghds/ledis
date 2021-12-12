@@ -97,6 +97,32 @@ func handleCommand(mainCommand string, splitCommand []string, commandListService
 		return handleSaveCommand(commandListService.GlobalService)
 	case "restore":
 		return handleRestoreCommand(commandListService.GlobalService)
+
+	case "sadd":
+		if len(splitCommand) < 3 {
+			return common.ErrNotEnoughParams
+		}
+		return handleSAddCommand(commandListService.SetService, splitCommand)
+	case "scard":
+		if len(splitCommand) < 2 {
+			return common.ErrNotEnoughParams
+		}
+		return handleSCardCommand(commandListService.SetService, splitCommand[1])
+	case "smembers":
+		if len(splitCommand) < 2 {
+			return common.ErrNotEnoughParams
+		}
+		return handleSMembersCommand(commandListService.SetService, splitCommand[1])
+	case "srem":
+		if len(splitCommand) < 3 {
+			return common.ErrNotEnoughParams
+		}
+		return handleSRemCommand(commandListService.SetService, splitCommand)
+	case "sinter":
+		if len(splitCommand) < 3 {
+			return common.ErrNotEnoughParams
+		}
+		return handleSInterCommand(commandListService.SetService, splitCommand)
 	default:
 		return common.ErrUnknownCommand
 	}
