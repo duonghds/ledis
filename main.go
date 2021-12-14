@@ -23,6 +23,9 @@ func main() {
 		v1.POST("/", handler.CommandHandler(commandListService))
 	}
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9900"
+	}
 	router.Run(fmt.Sprintf(":%s", port))
 }
 
