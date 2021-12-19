@@ -8,7 +8,6 @@ Both service deployed on Heroku.
 ### Source
 - Github `https://github.com/duonghds/ledis`
 - Github FE `https://github.com/duonghds/ledis-fe`
-- Describe about ledis from `Holistics company`
 - Heroku deploy domain `https://afternoon-wildwood-94295.herokuapp.com`
 - Heroku Post API `https://afternoon-wildwood-94295.herokuapp.com/api/`
 - Test with cli ` https://hidden-bayou-11572.herokuapp.com/`
